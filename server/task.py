@@ -57,7 +57,10 @@ def request_hint(task, code):
 
     Do NOT give away the answer. The user should have to think critically from
     the hint given to accomplish the task.
+
+    Make sure the hint provided actually helps the user accomplish the task.
     """
+    print(prompt)
     response = llm.complete(prompt)
     print("Request hint response: ", response)
 

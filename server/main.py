@@ -33,7 +33,7 @@ async def root():
 
 @app.post("/requestHint")
 async def request_hint(payload: Code):
-    hint = Task.request_hint(payload.code, payload.language)
+    hint = Task.request_hint(payload.task, payload.code)
     return {
         "payload": hint,
         "agent": "hint"

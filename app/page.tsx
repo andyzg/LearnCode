@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Editor from '@monaco-editor/react';
 
+const TASK = "Write a program that prints out every integer from 1 to 100 on a separate line";
+
 export default function Home() {
   const [value, setValue] = useState("# hello");
   const [hint, setHint] = useState("");
@@ -37,7 +39,7 @@ export default function Home() {
       body: JSON.stringify({
         code: value,
         language: "python",
-        task: "Print out the exact text 'Hello world' case sensitive"
+        task: TASK
       })
     });
 
@@ -61,7 +63,7 @@ export default function Home() {
       body: JSON.stringify({
         code: value,
         language: "python",
-        task: "Print out hello world"
+        task: TASK
       })
     });
 
@@ -75,6 +77,9 @@ export default function Home() {
 
   return (
     <main className="flex flex-col p-24">
+      <div className="mb-4">
+        Task: {TASK}
+      </div>
       {hint ? (
         <div className="bg-gray-600 rounded-md p-2 text-sm mb-8 flex-row flex">
           <div> {hint} </div>
