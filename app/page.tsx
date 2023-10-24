@@ -5,11 +5,25 @@ import Editor from '@monaco-editor/react';
 
 const TASK = "Write a program that prints out every integer from 1 to 100 on a separate line";
 
+const SyntaxErrorComponent = (props) => {
+  const { message, lineNumber } = props;
+  console.log(props);
+
+  const style = {
+    top: `${((lineNumber - 1) * 18)}px`
+  }
+
+  return (
+    <div className="absolute right-0 translate-x-8 text-xs w-96 bg-slate-200 p-2 text-gray-800 font-mono rounded-md" style={style}> Line {lineNumber}: {message} </div>
+  );
+};
+
 export default function Home() {
   const [value, setValue] = useState("# hello");
   const [hint, setHint] = useState("");
   const [analyzeCallback, setAnalyzeCallback] = useState(null);
   const [message, setMessage] = useState("");
+  const [syntaxError, setSyntaxError] = useState(null);
 
 
   const onChange = (newValue, e) => {
@@ -46,6 +60,11 @@ export default function Home() {
     // Parse body
     const body = await response.json();
     console.log(body);
+    if (body.agent === "syntax") {
+      setSyntaxError(JSON.parse(body.payload));
+      return;
+    }
+
     const payload = JSON.parse(body.payload);
     if (payload.message === "success") {
       setMessage("Success! You have completed the task.");
@@ -90,7 +109,7 @@ export default function Home() {
         <button onClick={onRequestHint} className="bg-gray-700 ease-in-out hover:bg-gray-800 rounded-full text-sm font-medium p-2"> Get hint </button>
       </div>
       <br />
-      <div className="flex-fill">
+      <div className="flex-fill relative pr-96">
         <Editor
           height="50vh"
           onChange={onChange}
@@ -99,6 +118,9 @@ export default function Home() {
           }}
           defaultLanguage="python"
           defaultValue={value} />
+          {syntaxError ? (
+            <SyntaxErrorComponent {...syntaxError} />
+          ) : null}
       </div>
       <div className="text-sm mt-2">
         {message}
