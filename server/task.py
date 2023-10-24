@@ -8,6 +8,8 @@ def analyze_task_alignment(task, code):
     - status: "false" or "true"
     - message: "success" or the reason why the task was not accomplished
     - hint: a hint on what to chat about the code so that it accomplishes the task
+    - syntaxError: a boolean "false" or "true" indicating whether there is a syntax error in the code or if the code will fail at runtime.
+    - errorMessage: if syntaxError is "true", then this field will contain the error message from the runtime error
 
     # Task: {task}
     # Code:
@@ -22,11 +24,15 @@ def analyze_task_alignment(task, code):
 def analyze_syntax_error(task, code, syntax):
     prompt = f"""
     # Objective
-    Given the task below and the code attached and  the syntax error attached, return a JSON object with the
+    Given the task below and the code attached and the syntax error attached,
+    help the user fix the error. Do not assume the user knows what a valid
+    expression is. Instead, explain what a valid expression is and use an
+    example that is appropriate for the task. Return a JSON object with the
     following fields:
     - message: an explanation for the syntax error and how to fix it
     - lineNumber: the line number where the syntax error is located
     - columnNumber: the column number where the syntax error is located
+
 
     # Task: {task}
     # Code:
